@@ -21,11 +21,11 @@ if [[ "${1:-}" == "--universal" && $# -eq 1 ]]; then
         ARCH_ARGS=(--scratch-path "$PWD/.build/universal/$ARCH" --triple "$TRIPLE")
         swift build "${BUILD_ARGS[@]}" "${ARCH_ARGS[@]}" --product ChatGPTLimits
         BIN_DIR="$(swift build "${BUILD_ARGS[@]}" "${ARCH_ARGS[@]}" --show-bin-path)"
-        lipo -verify_arch "$ARCH" "$BIN_DIR/ChatGPTLimits"
+        lipo "$BIN_DIR/ChatGPTLimits" -verify_arch "$ARCH"
         BINARIES+=("$BIN_DIR/ChatGPTLimits")
     done
     lipo -create "${BINARIES[@]}" -output "$APP/Contents/MacOS/ChatGPTLimits"
-    for ARCH in arm64 x86_64; do lipo -verify_arch "$ARCH" "$APP/Contents/MacOS/ChatGPTLimits"; done
+    for ARCH in arm64 x86_64; do lipo "$APP/Contents/MacOS/ChatGPTLimits" -verify_arch "$ARCH"; done
 elif [[ $# -eq 0 ]]; then
     if [[ -n "${TARGET_TRIPLE:-}" ]]; then BUILD_ARGS+=(--triple "$TARGET_TRIPLE"); fi
     swift build "${BUILD_ARGS[@]}" --product ChatGPTLimits

@@ -3,6 +3,11 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      publish_release:
+        description: Publish the version in VERSION after both architecture checks pass
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -38,3 +43,30 @@ jobs:
           path: dist/release/*
           if-no-files-found: error
           retention-days: 14
+  release:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish_release && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: publish-release
+      cancel-in-progress: false
+    steps:
+      - name: Check out the validated source revision
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Publish the validated universal build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          VERSION="$(cat VERSION)"
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          gh run download "$GITHUB_RUN_ID" --name ChatGPT-Limits-macos-15 --dir dist/release
+          SOURCE="chatgpt-limits-macos-$VERSION-source.tar.gz"
+          git archive --format=tar.gz --prefix="chatgpt-limits-macos-$VERSION/" --output="dist/release/$SOURCE" HEAD
+          (cd dist/release && sha256sum "$SOURCE" > "$SOURCE.sha256" && sha256sum -c ./*.sha256)
+          gh release create "v$VERSION" --target "$GITHUB_SHA" --title "ChatGPT Limits $VERSION" \
+            --notes-file "docs/RELEASE_NOTES_$VERSION.md" dist/release/*

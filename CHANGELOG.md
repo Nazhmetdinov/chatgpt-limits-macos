@@ -2,6 +2,7 @@
 
 ## 1.3.6 — 2026-10-19
 
+- Fix universal architecture verification across Apple lipo versions.
 - Replace the plain hexagon with an original flat green conversation mark, combining a quota arc with an AI spark.
 - Refresh synthetic Plus and Pro previews.
 

@@ -35,39 +35,13 @@ git archive --format=tar.gz --prefix="chatgpt-limits-macos-$VERSION/" \
 
 Packaging creates a universal DMG for regular users and a ZIP alternative. The DMG contains the app, an Applications shortcut, and bilingual Install.html. Both architecture slices are built locally; arm64 has been run, and Plus uses synthetic fixtures. CI also runs checks on x86_64, but its status is unknown until run on GitHub. Do not describe Plus as verified against a live Plus account or Intel as locally run.
 
-## Publish the prepared repository
+## Publish a release
 
-These are explicit publication steps, not part of build or install scripts. They require an account with repository-creation rights and an authenticated GitHub CLI (`gh`). No credentials belong in Git.
+Push the reviewed source to `main`, then open **Actions → macOS checks and builds → Run workflow**. Select `main`, enable **Publish the version in VERSION after both architecture checks pass**, and run it. Ordinary pushes and pull requests only validate and package; they never publish.
 
-1. Create an empty **public** repository named `chatgpt-limits-macos` under the intended account. Do not initialize it with an extra README or license. With the authenticated CLI:
+The release job runs only when both macOS architecture jobs succeed. It downloads the universal build from the same workflow run, creates a source archive from the exact tested commit, verifies SHA-256 checksums, and publishes the version from `VERSION` with its release notes. Only this final job has a temporary repository-scoped token with permission to write releases. No personal token or saved credentials are required.
 
-   ```sh
-   gh repo create Nazhmetdinov/chatgpt-limits-macos --public \
-     --description "Native macOS menu bar monitor for ChatGPT Work / Codex limits, resets, and notifications. Supports Plus and Pro."
-   git remote add origin https://github.com/Nazhmetdinov/chatgpt-limits-macos.git
-   git push -u origin HEAD:main
-   git push origin v1.3.6
-   gh repo edit Nazhmetdinov/chatgpt-limits-macos --default-branch main --enable-private-vulnerability-reporting
-   ```
-
-   If the repository or remote exists, inspect it first. Do not overwrite or force-push existing history.
-
-2. Wait for the macOS CI checks and inspect both architecture artifacts. Review repository visibility, license, documentation images, and Actions results.
-3. Create a draft release and attach audited archives with checksums:
-
-   ```sh
-   gh release create v1.3.6 --repo Nazhmetdinov/chatgpt-limits-macos \
-     --draft --verify-tag --title "ChatGPT Limits 1.3.6" \
-     --notes-file docs/RELEASE_NOTES_1.3.6.md \
-     dist/release/ChatGPT-Limits-v1.3.6-macOS-universal.dmg \
-     dist/release/ChatGPT-Limits-v1.3.6-macOS-universal.dmg.sha256 \
-     dist/release/ChatGPT-Limits-v1.3.6-macOS-universal.zip \
-     dist/release/ChatGPT-Limits-v1.3.6-macOS-universal.zip.sha256 \
-     dist/release/chatgpt-limits-macos-1.3.6-source.tar.gz \
-     dist/release/chatgpt-limits-macos-1.3.6-source.tar.gz.sha256
-   ```
-
-   Wait for both architecture jobs before publishing the universal download. Make the DMG the primary user-facing asset. Review the draft and publish it in GitHub Releases only with its stated validation and signing limits. Do not publish the withdrawn 1.3.0/1.3.1 beta artifacts.
+The workflow creates a new tag and release; it fails rather than replacing an existing release. Inspect any existing version before changing it. Make the universal DMG the primary user download. Review public visibility, download links, the six uploaded assets, and Actions results after publication.
 
 ## Signing and future versions
 

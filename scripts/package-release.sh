@@ -9,8 +9,8 @@ ACTUAL_VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString'
 codesign --verify --strict "$APP"
 python3 scripts/audit-release.py --binary "$APP/Contents/MacOS/ChatGPTLimits"
 ARCH="$(lipo -archs "$APP/Contents/MacOS/ChatGPTLimits" | tr ' ' '-')"
-if lipo -verify_arch arm64 "$APP/Contents/MacOS/ChatGPTLimits" 2>/dev/null \
-    && lipo -verify_arch x86_64 "$APP/Contents/MacOS/ChatGPTLimits" 2>/dev/null; then ARCH=universal; fi
+if lipo "$APP/Contents/MacOS/ChatGPTLimits" -verify_arch arm64 2>/dev/null \
+    && lipo "$APP/Contents/MacOS/ChatGPTLimits" -verify_arch x86_64 2>/dev/null; then ARCH=universal; fi
 NAME="ChatGPT-Limits-v${VERSION}-macOS-${ARCH}"
 STAGING="$(mktemp -d "$PWD/dist/package.XXXXXX")"
 trap 'rm -rf "$STAGING"' EXIT
