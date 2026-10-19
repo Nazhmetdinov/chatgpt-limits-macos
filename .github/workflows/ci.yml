@@ -1,0 +1,40 @@
+name: macOS checks and builds
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Audit publication files
+        run: python3 scripts/audit-release.py
+      - name: Check quota and notification behavior
+        run: swift run --disable-sandbox LimitsChecks
+      - name: Build universal app on Apple Silicon, native app on Intel
+        run: |
+          if [ "$(uname -m)" = arm64 ]; then
+            bash scripts/build.sh --universal
+          else
+            bash scripts/build.sh
+          fi
+      - name: Package DMG, app archive, and checksums
+        run: bash scripts/package-release.sh
+      - name: Upload ad-hoc signed build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ChatGPT-Limits-${{ matrix.os }}
+          path: dist/release/*
+          if-no-files-found: error
+          retention-days: 14

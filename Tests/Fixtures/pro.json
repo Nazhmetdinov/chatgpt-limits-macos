@@ -1,0 +1,26 @@
+{
+  "referenceTime": 1800000000,
+  "rateLimitsByLimitId": {
+    "codex": {
+      "limitId": "codex",
+      "planType": "pro",
+      "primary": {
+        "usedPercent": 28,
+        "windowDurationMins": 10080,
+        "resetsAt": 1800345600
+      },
+      "secondary": null
+    }
+  },
+  "rateLimitResetCredits": {
+    "availableCount": 2,
+    "credits": null
+  },
+  "verifiedBilling": {
+    "accountFingerprint": "50a5ee17cb005388e7f31e1ed28043dda745bb3d2b65d8042afaead6fd4af575",
+    "planType": "pro",
+    "renewalDay": "2027-01-25",
+    "checkedAt": 1800000000,
+    "source": "chatgpt-settings"
+  }
+}

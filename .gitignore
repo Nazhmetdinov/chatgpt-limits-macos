@@ -1,0 +1,17 @@
+.build/
+dist/
+.DS_Store
+.swiftpm/
+*.dSYM/
+*.app/
+*.zip
+*.dmg
+*.tar.gz
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.mobileprovision
+auth.json
+status.json
