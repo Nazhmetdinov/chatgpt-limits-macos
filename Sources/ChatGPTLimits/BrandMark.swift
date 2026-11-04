@@ -21,7 +21,7 @@ struct BrandMark: View {
     }
 }
 
-private struct ConversationRing: Shape {
+struct ConversationRing: Shape {
     func path(in rect: CGRect) -> Path {
         let scale = CGAffineTransform(scaleX: rect.width / 28, y: rect.height / 28)
             .concatenating(CGAffineTransform(translationX: rect.minX, y: rect.minY))
@@ -38,7 +38,7 @@ private struct ConversationRing: Shape {
     }
 }
 
-private struct IntelligenceSpark: Shape {
+struct IntelligenceSpark: Shape {
     func path(in rect: CGRect) -> Path {
         func point(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
             CGPoint(x: rect.minX + rect.width * x / 28, y: rect.minY + rect.height * y / 28)
