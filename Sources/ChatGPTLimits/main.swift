@@ -357,7 +357,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
 }
 
 signal(SIGPIPE, SIG_IGN)
-if let index = CommandLine.arguments.firstIndex(of: "--render-fixture"), index + 2 < CommandLine.arguments.count {
+if let index = CommandLine.arguments.firstIndex(of: "--render-app-icons"), index + 1 < CommandLine.arguments.count {
+    do {
+        let preview = index + 2 < CommandLine.arguments.count ? CommandLine.arguments[index + 2] : nil
+        try MainActor.assumeIsolated { try renderAppIcons(directory: CommandLine.arguments[index + 1], preview: preview) }
+    } catch { fputs("Icon rendering failed.\n", stderr); exit(1) }
+} else if let index = CommandLine.arguments.firstIndex(of: "--render-fixture"), index + 2 < CommandLine.arguments.count {
     do {
         try MainActor.assumeIsolated { try renderFixture(input: CommandLine.arguments[index + 1], output: CommandLine.arguments[index + 2]) }
     } catch { fputs("Fixture rendering failed.\n", stderr); exit(1) }

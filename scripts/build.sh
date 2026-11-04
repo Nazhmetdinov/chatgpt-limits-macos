@@ -10,7 +10,7 @@ mkdir -p "$PWD/dist"
 STAGING="$(mktemp -d "$PWD/dist/build.XXXXXX")"
 trap 'rm -rf "$STAGING"' EXIT
 APP="$STAGING/ChatGPT Limits.app"
-mkdir -p "$APP/Contents/MacOS"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 if [[ "${1:-}" == "--universal" && $# -eq 1 ]]; then
     [[ -z "${TARGET_TRIPLE:-}" ]] || { echo "Do not combine TARGET_TRIPLE and --universal." >&2; exit 1; }
     BINARIES=()
@@ -36,6 +36,10 @@ else
     exit 1
 fi
 strip -S -x "$APP/Contents/MacOS/ChatGPTLimits"
+# Render every standard and Retina size from the panel's shared vector mark.
+codesign --force --sign - "$APP/Contents/MacOS/ChatGPTLimits"
+"$APP/Contents/MacOS/ChatGPTLimits" --render-app-icons "$STAGING/AppIcon.iconset"
+iconutil -c icns "$STAGING/AppIcon.iconset" -o "$APP/Contents/Resources/AppIcon.icns"
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -45,6 +49,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
 <key>CFBundleName</key><string>ChatGPT Limits</string>
 <key>CFBundleDisplayName</key><string>ChatGPT Limits</string>
 <key>CFBundlePackageType</key><string>APPL</string>
+<key>CFBundleIconFile</key><string>AppIcon</string>
 <key>CFBundleShortVersionString</key><string>$VERSION</string>
 <key>CFBundleVersion</key><string>$VERSION</string>
 <key>LSMinimumSystemVersion</key><string>13.0</string>

@@ -62,7 +62,7 @@ public enum LimitsReader {
             try input.fileHandleForWriting.write(contentsOf: data)
         }
         try send(["id": 1, "method": "initialize", "params": ["clientInfo": [
-            "name": "chatgpt_limits_menu", "title": "ChatGPT Limits", "version": "1.3.6"
+            "name": "chatgpt_limits_menu", "title": "ChatGPT Limits", "version": "1.3.7"
         ]]])
         var buffer = Data(), initialized = false
         let deadline = ProcessInfo.processInfo.systemUptime + timeout

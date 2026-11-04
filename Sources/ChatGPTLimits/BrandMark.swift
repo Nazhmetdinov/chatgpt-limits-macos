@@ -3,19 +3,20 @@ import SwiftUI
 /// A conversation outline doubles as a quota ring; the spark suggests AI.
 /// This is a fixed brand mark, not a live usage indicator.
 struct BrandMark: View {
-    private let green = Color(red: 0.05, green: 0.66, blue: 0.47)
+    var tint = Color(red: 0.05, green: 0.66, blue: 0.47)
+    var edge: CGFloat = 28
 
     var body: some View {
         ZStack {
             ConversationRing()
-                .stroke(green.opacity(0.24), style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                .stroke(tint.opacity(0.24), style: StrokeStyle(lineWidth: edge / 14, lineCap: .round, lineJoin: .round))
             ConversationRing()
                 .trim(from: 0, to: 0.76)
-                .stroke(green, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                .stroke(tint, style: StrokeStyle(lineWidth: edge / 14, lineCap: .round, lineJoin: .round))
             IntelligenceSpark()
-                .fill(green)
+                .fill(tint)
         }
-        .frame(width: 28, height: 28)
+        .frame(width: edge, height: edge)
         .accessibilityHidden(true)
     }
 }

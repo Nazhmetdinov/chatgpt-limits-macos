@@ -7,3 +7,6 @@ mkdir -p docs/images
 for PLAN in plus pro; do
     TZ=UTC "$BIN" --render-fixture "Tests/Fixtures/$PLAN.json" "docs/images/$PLAN.png"
 done
+ICONSET="$(mktemp -d "$PWD/dist/icon-preview.XXXXXX")"
+trap 'rm -rf "$ICONSET"' EXIT
+"$BIN" --render-app-icons "$ICONSET" docs/images/app-icon.png

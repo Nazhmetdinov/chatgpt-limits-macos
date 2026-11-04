@@ -1,5 +1,7 @@
 # ChatGPT Limits для macOS
 
+<img src="docs/images/app-icon.png" width="96" height="96" alt="ChatGPT Limits icon">
+
 Нативный индикатор лимитов ChatGPT Work / Codex в строке меню Mac. Поддерживает **Plus и Pro**, показывая параметры текущего аккаунта, полученные от сервиса.
 
 [English](README.md) · [Участие в разработке](CONTRIBUTING.md) · [Подготовка релиза](docs/RELEASING.md)
@@ -8,7 +10,7 @@
 
 ## Установка без Терминала
 
-**[Скачать ChatGPT Limits 1.3.6 — DMG](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/download/v1.3.6/ChatGPT-Limits-v1.3.6-macOS-universal.dmg)** — один файл для Apple Silicon и Intel. [Все файлы релиза](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/latest). Нужны macOS 13+ и установленный ChatGPT или Codex с выполненным входом; Swift и инструменты разработки не нужны.
+**[Скачать ChatGPT Limits 1.3.7 — DMG](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/download/v1.3.7/ChatGPT-Limits-v1.3.7-macOS-universal.dmg)** — один файл для Apple Silicon и Intel. [Все файлы релиза](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/latest). Нужны macOS 13+ и установленный ChatGPT или Codex с выполненным входом; Swift и инструменты разработки не нужны.
 
 1. Скачайте и откройте DMG.
 2. Перетащите **ChatGPT Limits** на папку **Applications («Программы»)**.

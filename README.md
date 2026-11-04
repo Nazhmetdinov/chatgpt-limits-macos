@@ -1,5 +1,7 @@
 # ChatGPT Limits for macOS
 
+<img src="docs/images/app-icon.png" width="96" height="96" alt="ChatGPT Limits icon">
+
 A native menu bar monitor for ChatGPT Work / Codex subscription usage, reset times, and available extra resets. Supports **Plus and Pro** using the limits reported by your account.
 
 [Русская документация](README.ru.md) · [Contributing](CONTRIBUTING.md) · [Release guide](docs/RELEASING.md)
@@ -8,7 +10,7 @@ An independent, unofficial project. Not affiliated with OpenAI. The app interfac
 
 ## Install without Terminal
 
-**[Download ChatGPT Limits 1.3.6 — DMG](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/download/v1.3.6/ChatGPT-Limits-v1.3.6-macOS-universal.dmg)**: one file for Apple Silicon and Intel. [All release files](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/latest). Requires macOS 13+ and an installed, signed-in ChatGPT or Codex client. Swift and developer tools are not needed.
+**[Download ChatGPT Limits 1.3.7 — DMG](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/download/v1.3.7/ChatGPT-Limits-v1.3.7-macOS-universal.dmg)**: one file for Apple Silicon and Intel. [All release files](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/latest). Requires macOS 13+ and an installed, signed-in ChatGPT or Codex client. Swift and developer tools are not needed.
 
 1. Download and open the DMG.
 2. Drag **ChatGPT Limits** onto **Applications**.

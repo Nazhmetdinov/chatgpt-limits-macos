@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.7 — 2026-11-04
+
+- Add a native macOS app icon: an emerald tile with the shared conversation, quota and AI mark.
+- Render all standard and Retina icon sizes from vector source during the build and include the ICNS resource in the signed app bundle.
+
 ## 1.3.6 — 2026-10-19
 
 - Fix universal architecture verification across Apple lipo versions.
