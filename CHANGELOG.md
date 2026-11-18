@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.8 — 2026-11-18
+
+- Import verified web renewal dates through a local command that checks the active ChatGPT account and plan.
+- Refresh the card on open and hide past renewal dates.
+
 ## 1.3.7 — 2026-11-04
 
 - Add a native macOS app icon: an emerald tile with the shared conversation, quota and AI mark.

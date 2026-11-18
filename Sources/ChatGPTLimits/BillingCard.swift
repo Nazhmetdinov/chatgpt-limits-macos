@@ -17,24 +17,20 @@ struct BillingCard: View {
         VStack(alignment: .leading, spacing: 9) {
             Label("Следующая оплата", systemImage: "calendar")
                 .font(.system(size: 12, weight: .medium)).foregroundStyle(.secondary)
-            if let snapshot, let date = snapshot.renewalDate {
+            if let snapshot, let date = snapshot.renewalDate, let days = snapshot.daysRemaining(at: now), days >= 0 {
                 Text(formatted(date)).font(.system(size: 18, weight: .semibold))
-                if let days = snapshot.daysRemaining(at: now), days >= 0 {
-                    Text(days == 0 ? "Сегодня" : "До продления: \(days) дн.")
-                        .font(.system(size: 12)).foregroundStyle(.secondary)
-                }
+                Text(days == 0 ? "Сегодня" : "До продления: \(days) дн.")
+                    .font(.system(size: 12)).foregroundStyle(.secondary)
                 Text("Проверено \(formatted(Date(timeIntervalSince1970: snapshot.checkedAt))) в ChatGPT.")
                     .font(.system(size: 11)).foregroundStyle(.secondary)
-                Text(snapshot.needsVerification(at: now)
-                     ? "Последняя известная дата — проверьте актуальность."
-                     : "Дата продления; списание ещё не подтверждено.")
-                    .font(.system(size: 11)).foregroundStyle(snapshot.needsVerification(at: now) ? .orange : .secondary)
+                if snapshot.needsVerification(at: now) {
+                    Text("Дату нужно сверить с подпиской.").font(.system(size: 11)).foregroundStyle(.orange)
+                }
+            } else if snapshot != nil {
+                Text("Ожидает обновления").font(.system(size: 18, weight: .semibold))
             } else {
                 Text("Дата недоступна").font(.system(size: 18, weight: .semibold))
             }
-            Text("Автоматическое обновление пока недоступно.")
-                .font(.system(size: 11)).foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
             Button(action: openSubscription) {
                 Label("Управление подпиской", systemImage: "arrow.up.right.square")
             }.controlSize(.small)

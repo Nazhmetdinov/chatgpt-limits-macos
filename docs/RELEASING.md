@@ -1,6 +1,6 @@
 # Release preparation and GitHub publication
 
-Release **1.3.7** includes a panel that fits its content and a flat green conversation mark with a quota arc and an AI spark. It includes a next-payment card for optional, locally verified renewal snapshots and a default-browser subscription-management link. Personal snapshots are never bundled, committed or published; other users see unavailable until a date has been verified for their account. Chromium browsers and Firefox use a new-tab command; Safari and other browsers retain their own link-opening preferences. Automatic billing-date retrieval is still unavailable. Creating a local commit or archive does not publish a repository or release.
+The next-payment card uses locally verified renewal snapshots and supports an optional import from a separately configured local Codex automation. Use synthetic fixtures for screenshots and keep personal snapshots and automation settings outside the repository and release archives.
 
 Public repository: `Nazhmetdinov/chatgpt-limits-macos`.
 

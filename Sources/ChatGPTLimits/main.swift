@@ -67,11 +67,16 @@ final class UsageModel: ObservableObject {
                     self.updatedAt = self.now
                     self.error = nil
                     self.notifications.observe(usage, at: self.now)
-                    self.verifiedBilling = VerifiedBilling.load(accountID: usage.accountId, plan: usage.planType, now: self.now)
+                    self.reloadBilling()
                 case .failure(let failure): self.error = (failure as? LimitsError)?.errorDescription ?? "Не удалось обновить данные."
                 }
             }
         }
+    }
+    func reloadBilling() {
+        guard !isPreview else { return }
+        let snapshot = VerifiedBilling.load(accountID: usage?.accountId, plan: usage?.planType, now: now)
+        if snapshot != verifiedBilling { verifiedBilling = snapshot }
     }
     func toggleLogin() {
         do {
@@ -343,6 +348,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
     func showPopover() {
         guard let button = statusItem.button else { return }
         model.now = Date()
+        model.reloadBilling()
         model.loginStatus = SMAppService.mainApp.status
         model.notifications.refreshAuthorization()
         if model.stale { model.refresh() }
@@ -374,13 +380,37 @@ if let index = CommandLine.arguments.firstIndex(of: "--render-app-icons"), index
     case .notFound: print("not-found")
     @unknown default: print("unknown")
     }
+} else if CommandLine.arguments.contains("--billing-refresh-needed") {
+    do { print(try VerifiedBilling.refreshDue(at: Date()) ? "due" : "fresh") }
+    catch { fputs("Unable to check subscription refresh status.\n", stderr); exit(1) }
+} else if CommandLine.arguments.contains("--sync-renewal") {
+    struct RenewalObservation: Decodable {
+        let renewalDay: String
+        let emailFingerprint: String
+        let plan: String
+    }
+    do {
+        guard let input = try FileHandle.standardInput.read(upToCount: 4097), input.count <= 4096 else {
+            throw LimitsError.malformed
+        }
+        let observation = try JSONDecoder().decode(RenewalObservation.self, from: input)
+        try VerifiedBilling.sync(renewalDay: observation.renewalDay, emailFingerprint: observation.emailFingerprint,
+                                 plan: observation.plan, at: Date())
+        print("Renewal date synced.")
+    } catch {
+        let message = (error as? LimitsError) == .authentication
+            ? "The browser account or plan could not be matched to Codex."
+            : "Unable to sync the renewal date."
+        fputs("\(message)\n", stderr)
+        exit(1)
+    }
 } else if CommandLine.arguments.contains("--check") {
     do {
         let usage = try LimitsReader.fetch()
         print(usage.statusTitle(at: Date(), stale: false))
         print("Buckets: \(usage.buckets.count); reset credits: \(usage.resetCount.map(String.init) ?? "unknown")")
         if let billing = VerifiedBilling.load(accountID: usage.accountId, plan: usage.planType, now: Date()) {
-            print("Verified renewal: \(billing.renewalDay); automatic updates: unavailable")
+            print("Verified renewal: \(billing.renewalDay); verification: \(billing.needsVerification(at: Date()) ? "due" : "fresh")")
         }
     } catch {
         fputs("\((error as? LimitsError)?.errorDescription ?? "Не удалось получить данные")\n", stderr)

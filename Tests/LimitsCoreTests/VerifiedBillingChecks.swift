@@ -27,7 +27,8 @@ final class VerifiedBillingChecks {
     func freshnessAndNoRollover() throws {
         let value = try snapshot(), now = Date(timeIntervalSince1970: 1_800_000_000)
         precondition(!value.needsVerification(at: now))
-        precondition(value.needsVerification(at: now.addingTimeInterval(86400)))
+        precondition(!value.needsVerification(at: now.addingTimeInterval(6 * 86400)))
+        precondition(value.needsVerification(at: now.addingTimeInterval(7 * 86400)))
         let after = value.renewalDate!.addingTimeInterval(86400)
         precondition(value.daysRemaining(at: after) == -1)
         precondition(value.needsVerification(at: after))

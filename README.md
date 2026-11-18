@@ -10,7 +10,7 @@ An independent, unofficial project. Not affiliated with OpenAI. The app interfac
 
 ## Install without Terminal
 
-**[Download ChatGPT Limits 1.3.7 — DMG](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/download/v1.3.7/ChatGPT-Limits-v1.3.7-macOS-universal.dmg)**: one file for Apple Silicon and Intel. [All release files](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/latest). Requires macOS 13+ and an installed, signed-in ChatGPT or Codex client. Swift and developer tools are not needed.
+**[Download ChatGPT Limits 1.3.8 — DMG](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/download/v1.3.8/ChatGPT-Limits-v1.3.8-macOS-universal.dmg)**: one file for Apple Silicon and Intel. [All release files](https://github.com/Nazhmetdinov/chatgpt-limits-macos/releases/latest). Requires macOS 13+ and an installed, signed-in ChatGPT or Codex client. Swift and developer tools are not needed.
 
 1. Download and open the DMG.
 2. Drag **ChatGPT Limits** onto **Applications**.
@@ -47,7 +47,7 @@ The service reports **percentages, not a fixed number of remaining tokens**. Thi
 
 **Управление подпиской** opens ChatGPT subscription settings in a new tab in Chrome/Chromium, Edge, Brave, Vivaldi and Firefox when one of these is the default browser. Safari and other browsers follow their own external-link tab/window preferences. A browser window is created if none is open. No separate sign-in window, browser extension, or developer-mode setup is required by the monitor.
 
-The **Следующая оплата** card displays a locally verified date when a snapshot for the current account and plan is present, or **Дата недоступна** otherwise. The snapshot records when the date was checked on the ChatGPT subscription page, marks it as needing verification after 24 hours, and never rolls it forward automatically. Currently this is populated only during assisted verification; ordinary installation does not automatically import a date. Automatic next-payment updates are not available in this version: the installed client's limits response does not include billing dates. The monitor does not infer them from usage resets. Manage payments through the service where the subscription was purchased (ChatGPT, App Store, Google Play, or another provider).
+The **Следующая оплата** card shows the renewal day most recently verified for the active account and plan. It marks observations after seven days for review and hides dates that have passed. The Codex API provides quota, but no personal billing dates. For web subscriptions, a separately configured local Codex automation can read the date from signed-in ChatGPT and import it after matching the account and plan. Set up the automation in Codex if you want scheduled updates. For subscriptions purchased on iOS or Android, Apple or Google manages billing.
 
 ## Notifications
 
@@ -77,7 +77,7 @@ Builds use an **ad-hoc signature** and are not notarized. `bash scripts/build.sh
 
 ## How it works and privacy
 
-The app starts the installed `codex app-server` over stdio, sends `initialize` and `account/rateLimits/read`, then stops that child process. It uses the client's existing login. It does not read or copy credential files, call a model, buy credits, or redeem resets. The installed client handles authentication and its own network traffic.
+The app reads quotas through the installed Codex App Server. The optional renewal import also compares the account identity and plan through the same service. The account email is used in memory only to compare its fingerprint.
 
 It prefers `rateLimitsByLimitId`, with a legacy `rateLimits` fallback. The reset balance comes from `availableCount`, not from the length of a possibly truncated details list. Unknown fields remain unknown.
 
